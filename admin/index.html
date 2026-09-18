@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-building-circle-check"></i> SMART ROOM
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="index.html" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="rooms.html"><i class="fa-solid fa-door-open"></i> Kelola Ruangan</a></li>
+                <li><a href="lockers.html"><i class="fa-solid fa-lock"></i> Kelola Loker</a></li>
+                <li><a href="bookings.html"><i class="fa-solid fa-clipboard-list"></i> Kelola Peminjaman</a></li>
+                <li><a href="users.html"><i class="fa-solid fa-users"></i> Kelola Pengguna</a></li>
+                <li><a href="monitoring.html"><i class="fa-solid fa-desktop"></i> Monitoring</a></li>
+                <li><a href="#" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2>Selamat datang, <span id="adminName">Admin</span>!</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="window.location.href='rooms.html'"><i class="fa-solid fa-plus"></i> Tambah Ruangan</button>
+                    <button class="btn btn-outline-primary" onclick="window.location.href='lockers.html'"><i class="fa-solid fa-plus"></i> Tambah Loker</button>
+                </div>
+            </header>
+
+            <div class="container-fluid p-4">
+                <!-- Alert Panel -->
+                <div id="lateAlertPanel" class="alert alert-danger d-none" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Terdapat <span id="lateCount">0</span> kunci terlambat dikembalikan!
+                </div>
+
+                <!-- Stats Row 1 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-primary text-white"><i class="fa-solid fa-door-closed"></i></div>
+                            <div class="stat-details">
+                                <p>Total Ruangan</p>
+                                <h3 id="statTotalRooms">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-success text-white"><i class="fa-solid fa-door-open"></i></div>
+                            <div class="stat-details">
+                                <p>Ruangan Tersedia</p>
+                                <h3 id="statAvailableRooms">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-warning text-white"><i class="fa-solid fa-users-viewfinder"></i></div>
+                            <div class="stat-details">
+                                <p>Ruangan Digunakan</p>
+                                <h3 id="statUsedRooms">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-info text-white"><i class="fa-solid fa-users"></i></div>
+                            <div class="stat-details">
+                                <p>Total Pengguna</p>
+                                <h3 id="statTotalUsers">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Row 2 -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-primary text-white"><i class="fa-solid fa-calendar-check"></i></div>
+                            <div class="stat-details">
+                                <p>Peminjaman Aktif</p>
+                                <h3 id="statActiveBookings">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-secondary text-white"><i class="fa-solid fa-key"></i></div>
+                            <div class="stat-details">
+                                <p>Kunci Dipinjam</p>
+                                <h3 id="statBorrowedKeys">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-danger text-white"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-details">
+                                <p>Kunci Terlambat</p>
+                                <h3 id="statLateKeys">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-warning text-white"><i class="fa-solid fa-hourglass-half"></i></div>
+                            <div class="stat-details">
+                                <p>Menunggu Persetujuan</p>
+                                <h3 id="statPendingBookings">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="chart-container">
+                            <h4>Peminjaman per Hari (7 Hari Terakhir)</h4>
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-container">
+                            <h4>Distribusi Ruangan</h4>
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="admin-panel">
+                            <h4>Peminjaman Menunggu Persetujuan</h4>
+                            <div class="table-responsive">
+                                <table class="table admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Peminjam</th>
+                                            <th>Ruangan</th>
+                                            <th>Waktu</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentBookingsTable">
+                                        <!-- Populated via JS -->
+                                        <tr><td colspan="4" class="text-center">Memuat data...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="admin-panel">
+                            <h4>Transaksi Kunci Terakhir</h4>
+                            <div class="table-responsive">
+                                <table class="table admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kunci</th>
+                                            <th>Peminjam</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentKeysTable">
+                                        <!-- Populated via JS -->
+                                        <tr><td colspan="3" class="text-center">Memuat data...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/notifications.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize charts with dummy data for now
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                    datasets: [{
+                        label: 'Peminjaman',
+                        data: [12, 19, 3, 5, 2, 3, 9],
+                        backgroundColor: '#0d9488'
+                    }]
+                }
+            });
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ruang A', 'Ruang B', 'Ruang C'],
+                    datasets: [{
+                        data: [10, 20, 30],
+                        backgroundColor: ['#0d9488', '#f59e0b', '#3b82f6']
+                    }]
+                }
+            });
+            
+            // Note: In real app, load data from Firestore here
+        });
+    </script>
+</body>
+</html>
