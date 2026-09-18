@@ -1,32 +1,21 @@
-// =====================================================
-// SMART ROOM - Firebase Configuration
-// =====================================================
-// PENTING: Ganti nilai di bawah ini dengan konfigurasi
-// Firebase project Anda yang sebenarnya.
-// Cara mendapatkan: Firebase Console > Project Settings > Your Apps
-// =====================================================
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDoyLaifiLz9sxIUMhJGKAV64vkxHWpAVw",
+  authDomain: "smart-room-f2218.firebaseapp.com",
+  projectId: "smart-room-f2218",
+  storageBucket: "smart-room-f2218.firebasestorage.app",
+  messagingSenderId: "500980112934",
+  appId: "1:500980112934:web:5a76f2a5424c4f53bc90e7",
+  measurementId: "G-6SZL31GFV4"
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Initialize services
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// Firestore settings
-db.settings({ experimentalForceLongPolling: true });
-
-// Export for use in other modules
-// (using window object since we're not using ES modules)
-window.SmartRoom = window.SmartRoom || {};
-window.SmartRoom.auth = auth;
-window.SmartRoom.db = db;
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
