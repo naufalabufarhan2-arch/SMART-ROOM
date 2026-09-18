@@ -1,0 +1,246 @@
+/* 
+ * SMART ROOM AUTH PAGES STYLES
+ */
+
+.auth-body {
+  min-height: 100vh;
+  display: flex;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+/* 1. Split Layout */
+.auth-left {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--bg);
+  position: relative;
+}
+
+/* 2. Left Side Content */
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  z-index: 2;
+  text-decoration: none;
+  color: white;
+}
+
+.auth-brand:hover {
+  color: #ccfbf1;
+}
+
+.auth-quote {
+  z-index: 2;
+  max-width: 500px;
+}
+
+.auth-quote h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.auth-quote p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* 3. Background Shapes (CSS Only) */
+.shape {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: 50%;
+  animation: float-auth 10s infinite linear;
+}
+
+.shape-1 { width: 300px; height: 300px; top: -100px; right: -100px; }
+.shape-2 { width: 400px; height: 400px; bottom: -150px; left: -150px; animation-duration: 15s; animation-direction: reverse; }
+.shape-3 { width: 150px; height: 150px; top: 40%; right: 20%; animation-duration: 12s; }
+
+@keyframes float-auth {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  33% { transform: rotate(120deg) translate(20px, 20px); }
+  66% { transform: rotate(240deg) translate(-20px, 20px); }
+  100% { transform: rotate(360deg) translate(0, 0); }
+}
+
+/* 4. Glassmorphism Form Card */
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 3rem;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 2;
+}
+
+.auth-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.auth-header h3 {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+}
+
+/* 5. Floating Labels */
+.form-floating {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-floating .form-control {
+  height: calc(3.5rem + 2px);
+  padding: 1rem 1rem;
+  background-color: transparent;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.form-floating .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+.form-floating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 1rem;
+  pointer-events: none;
+  border: 1px solid transparent;
+  transform-origin: 0 0;
+  transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+  color: var(--text-secondary);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  opacity: .65;
+  transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+/* 6. Password Strength Indicator */
+.password-strength {
+  height: 5px;
+  border-radius: 5px;
+  background-color: var(--border);
+  margin-top: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0;
+  transition: all 0.3s ease;
+}
+
+.strength-weak { background-color: var(--danger); width: 33%; }
+.strength-medium { background-color: var(--warning); width: 66%; }
+.strength-strong { background-color: var(--success); width: 100%; }
+
+.strength-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  display: block;
+  text-align: right;
+}
+
+/* 7. Social Login (Styling only) */
+.social-login {
+  margin-top: 2rem;
+}
+
+.social-login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.social-login-divider::before,
+.social-login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.social-login-divider span {
+  padding: 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.btn-social {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-social:hover {
+  background: var(--bg);
+  border-color: #cbd5e1;
+}
+
+.btn-social img {
+  width: 20px;
+  height: 20px;
+}
+
+/* 8. Mobile Responsive */
+@media (max-width: 991.98px) {
+  .auth-left {
+    display: none;
+  }
+  
+  .auth-right {
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--bg) 0%, #e0f2fe 100%);
+  }
+  
+  .auth-card {
+    padding: 2rem;
+  }
+}

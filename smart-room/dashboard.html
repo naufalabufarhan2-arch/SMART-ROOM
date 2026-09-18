@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SMART ROOM</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --sidebar-width: 250px;
+            --bg-color: #f1f5f9;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .nav-link {
+            color: #64748b;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-link i {
+            width: 24px;
+            font-size: 1.1rem;
+            margin-right: 10px;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background-color: #f0fdfa;
+            border-right: 3px solid var(--primary);
+        }
+        .logout-link {
+            color: #ef4444;
+        }
+        .logout-link:hover {
+            color: #dc2626;
+            background-color: #fef2f2;
+            border-right-color: #ef4444;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* Topbar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Cards */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        .bg-light-primary { background: #f0fdfa; color: var(--primary); }
+        .bg-light-warning { background: #fffbeb; color: #d97706; }
+        .bg-light-success { background: #f0fdf4; color: #16a34a; }
+        .bg-light-info { background: #eff6ff; color: #2563eb; }
+
+        .card-custom {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Badges & Tables */
+        .table > :not(caption) > * > * {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        .badge-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .late-warning {
+            background-color: #fef2f2 !important;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .room-card img {
+            height: 150px;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; padding: 1rem; }
+            .sidebar.show { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4 class="fw-bold text-primary mb-0"><i class="fa-solid fa-building me-2"></i>SMART ROOM</h4>
+        </div>
+        <div class="d-flex flex-column justify-content-between h-100 pb-5">
+            <ul class="nav flex-column mt-3">
+                <li class="nav-item"><a href="#" class="nav-link active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-door-open"></i> Ruangan</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-calendar-alt"></i> Peminjaman</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-vault"></i> Loker Kunci</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-clipboard-list"></i> Riwayat</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-bell"></i> Notifikasi <span class="badge bg-danger ms-auto rounded-pill">2</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa-solid fa-user"></i> Profil</a></li>
+            </ul>
+            <ul class="nav flex-column mb-5">
+                <li class="nav-item"><a href="#" class="nav-link logout-link" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div>
+                <button class="btn btn-light d-md-none me-2" onclick="document.getElementById('sidebar').classList.toggle('show')">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h3 class="fw-bold mb-0">Dashboard</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 small">
+                        <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Smart Room</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <div class="user-profile">
+                <div class="text-end d-none d-sm-block">
+                    <div class="fw-bold fs-6 lh-1" id="userName">User Name</div>
+                    <small class="text-muted">User</small>
+                </div>
+                <div class="avatar" id="userAvatar">U</div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-light-primary"><i class="fa-solid fa-door-open"></i></div>
+                    <div>
+                        <h3 class="fw-bold mb-0">12</h3>
+                        <span class="text-muted small">Ruangan Tersedia</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-light-warning"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <h3 class="fw-bold mb-0">2</h3>
+                        <span class="text-muted small">Peminjaman Aktif</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-light-success"><i class="fa-solid fa-key"></i></div>
+                    <div>
+                        <h3 class="fw-bold mb-0">1</h3>
+                        <span class="text-muted small">Kunci Dipinjam</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-light-info"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <div>
+                        <h3 class="fw-bold mb-0">45</h3>
+                        <span class="text-muted small">Total Riwayat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Bookings List -->
+            <div class="col-lg-8">
+                <div class="card-custom p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Peminjaman Saya</h5>
+                        <button class="btn btn-sm btn-primary"><i class="fa-solid fa-plus me-1"></i> Pinjam Baru</button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="bookingsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Ruangan</th>
+                                    <th>Jadwal</th>
+                                    <th>Status</th>
+                                    <th>Kunci</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Mock Data rows -->
+                                <tr class="late-warning">
+                                    <td>
+                                        <div class="fw-bold">Ruang Rapat A</div>
+                                        <small class="text-muted">Lantai 1</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-medium">Hari ini</div>
+                                        <small class="text-danger fw-bold"><i class="fa-solid fa-timer"></i> Berakhir dalam 5 mnt</small>
+                                    </td>
+                                    <td><span class="badge bg-warning text-dark badge-status">Sedang Berjalan</span></td>
+                                    <td><span class="text-success"><i class="fa-solid fa-key"></i> Di tangan</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger">Kembalikan Kunci</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">Auditorium</div>
+                                        <small class="text-muted">Lantai 3</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-medium">Besok</div>
+                                        <small class="text-muted">09:00 - 12:00</small>
+                                    </td>
+                                    <td><span class="badge bg-success badge-status">Disetujui</span></td>
+                                    <td><span class="text-muted"><i class="fa-solid fa-vault"></i> Di Loker</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary" disabled>Ambil Kunci</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Popular Rooms -->
+            <div class="col-lg-4">
+                <div class="card-custom p-4">
+                    <h5 class="fw-bold mb-4">Ruangan Populer</h5>
+                    
+                    <div class="card mb-3 border-0 shadow-sm room-card">
+                        <div class="d-flex p-3 align-items-center">
+                            <div class="bg-light rounded p-3 me-3 text-primary text-center" style="width: 60px;">
+                                <i class="fa-solid fa-users fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1">Ruang Diskusi 1</h6>
+                                <span class="badge bg-success small">Tersedia</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary rounded-circle"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3 border-0 shadow-sm room-card">
+                        <div class="d-flex p-3 align-items-center">
+                            <div class="bg-light rounded p-3 me-3 text-primary text-center" style="width: 60px;">
+                                <i class="fa-solid fa-chalkboard-user fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1">Lab Komputer A</h6>
+                                <span class="badge bg-danger small">Dipakai</span>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary rounded-circle" disabled><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm room-card">
+                        <div class="d-flex p-3 align-items-center">
+                            <div class="bg-light rounded p-3 me-3 text-primary text-center" style="width: 60px;">
+                                <i class="fa-solid fa-video fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1">Studio Podcast</h6>
+                                <span class="badge bg-success small">Tersedia</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary rounded-circle"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // Check Auth Status
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = localStorage.getItem('smartRoom_user');
+            if (!userData) {
+                window.location.href = 'login.html';
+            } else {
+                try {
+                    const user = JSON.parse(userData);
+                    document.getElementById('userName').textContent = user.displayName || 'Pengguna';
+                    document.getElementById('userAvatar').textContent = (user.displayName || 'U').charAt(0).toUpperCase();
+                } catch(e) {}
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('smartRoom_user');
+            window.location.href = 'login.html';
+        });
+
+        // Simulated Auto-refresh and countdown for late bookings
+        setInterval(() => {
+            console.log("Checking for late bookings...");
+            // In a real app, this would fetch updated statuses from Firestore
+            // e.g. db.collection('bookings').where('userId', '==', user.uid)
+        }, 30000); // Check every 30 seconds
+    </script>
+</body>
+</html>

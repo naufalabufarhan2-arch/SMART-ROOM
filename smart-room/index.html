@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART ROOM - Sistem Peminjaman Ruangan & Loker Otomatis</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Custom CSS (Simulated via inline for standalone functionality) -->
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        
+        /* Navbar */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 1.2rem 0;
+            background: transparent;
+            z-index: 1000;
+        }
+        
+        .navbar.scrolled {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 0.8rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary) !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin: 0 0.5rem;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(13, 148, 136, 0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .badge-hero {
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--text-dark), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .hero-stat-item h4 {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            padding: 5rem 0;
+            background: white;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 1rem;
+            background: var(--secondary);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .counter {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        
+        /* Features */
+        .features-section {
+            padding: 5rem 0;
+            background: var(--secondary);
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(13, 148, 136, 0.1);
+        }
+        
+        .feature-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: rgba(13, 148, 136, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon-wrapper i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 5rem 0;
+            background: white;
+        }
+        
+        .step-wrapper {
+            position: relative;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 0 10px rgba(13, 148, 136, 0.1);
+        }
+        
+        /* CTA */
+        .cta-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 4rem 0 2rem;
+        }
+        
+        footer h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fa-solid fa-building"></i> SMART ROOM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#fitur">Fitur</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cara-kerja">Cara Kerja</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a href="login.html" class="btn btn-outline-primary px-4 rounded-pill">Login</a>
+                    <a href="register.html" class="btn btn-primary px-4 rounded-pill">Daftar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="beranda">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <div class="badge-hero">
+                        ✨ Sistem Cerdas Peminjaman
+                    </div>
+                    <h1 class="hero-title">SMART ROOM</h1>
+                    <h2 class="hero-subtitle">Sistem Peminjaman Ruangan & Loker Kunci Otomatis</h2>
+                    <p class="lead text-muted mb-4">
+                        Kelola peminjaman ruangan dan akses kunci secara efisien, aman, dan otomatis. Tinggalkan sistem manual dan beralih ke masa depan pengelolaan fasilitas.
+                    </p>
+                    <div class="d-flex gap-3 mb-4">
+                        <a href="login.html" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">Mulai Sekarang <i class="fa-solid fa-arrow-right ms-2"></i></a>
+                        <a href="#fitur" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Pelajari Lebih</a>
+                    </div>
+                    
+                    <div class="hero-stats">
+                        <div class="hero-stat-item">
+                            <h4>50+</h4>
+                            <span class="text-muted small">Ruangan</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <h4>200+</h4>
+                            <span class="text-muted small">Pengguna</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <h4>99%</h4>
+                            <span class="text-muted small">Uptime</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block text-center position-relative">
+                    <svg viewBox="0 0 600 500" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background Shapes -->
+                        <circle cx="300" cy="250" r="200" fill="#e0f2fe" opacity="0.5"/>
+                        <path d="M100 400 L500 400 L550 150 L50 150 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                        
+                        <!-- Room/Door -->
+                        <rect x="250" y="180" width="100" height="220" fill="#0d9488" rx="5"/>
+                        <circle cx="330" cy="290" r="8" fill="#fff"/>
+                        
+                        <!-- Smart Locker -->
+                        <rect x="120" y="220" width="90" height="180" fill="#334155" rx="5"/>
+                        <rect x="130" y="240" width="30" height="30" fill="#94a3b8" rx="3"/>
+                        <rect x="170" y="240" width="30" height="30" fill="#10b981" rx="3"/> <!-- Active locker -->
+                        <rect x="130" y="280" width="30" height="30" fill="#94a3b8" rx="3"/>
+                        <rect x="170" y="280" width="30" height="30" fill="#94a3b8" rx="3"/>
+                        <rect x="130" y="320" width="30" height="30" fill="#94a3b8" rx="3"/>
+                        <rect x="170" y="320" width="30" height="30" fill="#94a3b8" rx="3"/>
+                        
+                        <!-- Key -->
+                        <path d="M185 255 L200 240 L210 250 M185 255 A 8 8 0 1 0 175 265" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                        
+                        <!-- Digital Dashboard floating -->
+                        <rect x="380" y="100" width="150" height="100" fill="#fff" rx="8" filter="drop-shadow(0 10px 8px rgba(0,0,0,0.1))"/>
+                        <rect x="390" y="115" width="80" height="10" fill="#e2e8f0" rx="5"/>
+                        <rect x="390" y="135" width="130" height="8" fill="#e2e8f0" rx="4"/>
+                        <rect x="390" y="155" width="100" height="8" fill="#e2e8f0" rx="4"/>
+                        <circle cx="500" cy="120" r="15" fill="#10b981"/>
+                        <path d="M493 120 L498 125 L508 115" fill="none" stroke="#fff" stroke-width="2"/>
+                        
+                        <!-- Floating elements -->
+                        <circle cx="150" cy="120" r="20" fill="#fef3c7"/>
+                        <path d="M140 120 L160 120 M150 110 L150 130" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Counter Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-door-open stat-icon"></i>
+                        <div class="counter" data-target="52">0</div>
+                        <p class="text-muted mb-0">Ruangan Tersedia</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-calendar-check stat-icon"></i>
+                        <div class="counter" data-target="1430">0</div>
+                        <p class="text-muted mb-0">Peminjaman Berhasil</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-users stat-icon"></i>
+                        <div class="counter" data-target="285">0</div>
+                        <p class="text-muted mb-0">Pengguna Aktif</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-key stat-icon"></i>
+                        <div class="counter" data-target="104">0</div>
+                        <p class="text-muted mb-0">Loker Kunci</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="fitur">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h6 class="text-primary fw-bold text-uppercase tracking-wider">Keunggulan Kami</h6>
+                <h2 class="fw-bold mb-3">Fitur SMART ROOM</h2>
+                <p class="text-muted max-w-2xl mx-auto">Solusi lengkap untuk manajemen peminjaman ruangan dan kunci dengan teknologi modern.</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-regular fa-calendar-alt"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Peminjaman Online</h5>
+                        <p class="text-muted">Ajukan peminjaman kapan saja dan di mana saja melalui perangkat Anda tanpa perlu datang ke lokasi.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-vault"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Loker Kunci Otomatis</h5>
+                        <p class="text-muted">Kunci tersimpan aman di loker digital yang hanya bisa diakses setelah peminjaman disetujui.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Real-time Monitoring</h5>
+                        <p class="text-muted">Pantau status ketersediaan ruangan dan lokasi kunci secara langsung setiap saat.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-file-contract"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Laporan Lengkap</h5>
+                        <p class="text-muted">Riwayat penggunaan ruangan dan pergerakan kunci tercatat otomatis untuk keperluan audit.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-regular fa-bell"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Notifikasi Otomatis</h5>
+                        <p class="text-muted">Dapatkan notifikasi status peminjaman, pengingat pengembalian, dan pemberitahuan penting lainnya.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Responsif</h5>
+                        <p class="text-muted">Antarmuka yang dioptimalkan untuk berbagai perangkat, baik desktop, tablet, maupun smartphone.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="cara-kerja">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h6 class="text-primary fw-bold text-uppercase tracking-wider">Alur Sistem</h6>
+                <h2 class="fw-bold mb-3">Cara Kerja SMART ROOM</h2>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="step-wrapper">
+                        <div class="step-number">1</div>
+                        <h6 class="fw-bold">Daftar & Login</h6>
+                        <p class="text-muted small">Buat akun dan masuk</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="step-wrapper">
+                        <div class="step-number">2</div>
+                        <h6 class="fw-bold">Pilih Ruangan</h6>
+                        <p class="text-muted small">Pilih jadwal kosong</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="step-wrapper">
+                        <div class="step-number">3</div>
+                        <h6 class="fw-bold">Tunggu Persetujuan</h6>
+                        <p class="text-muted small">Konfirmasi dari admin</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="step-wrapper">
+                        <div class="step-number">4</div>
+                        <h6 class="fw-bold">Ambil Kunci</h6>
+                        <p class="text-muted small">Dari loker digital</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="step-wrapper">
+                        <div class="step-number">5</div>
+                        <h6 class="fw-bold">Gunakan Ruangan</h6>
+                        <p class="text-muted small">Sesuai jadwal</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="step-wrapper">
+                        <div class="step-number">6</div>
+                        <h6 class="fw-bold">Kembalikan Kunci</h6>
+                        <p class="text-muted small">Kembali ke loker</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="fw-bold mb-4">Siap Menggunakan SMART ROOM?</h2>
+            <p class="lead mb-5 opacity-75 max-w-2xl mx-auto">Bergabunglah dengan ratusan pengguna lainnya dan nikmati kemudahan pengelolaan ruangan dengan sistem pintar kami.</p>
+            <a href="register.html" class="btn btn-light btn-lg rounded-pill px-5 text-primary fw-bold">Daftar Sekarang Secara Gratis</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <h5 class="text-white d-flex align-items-center mb-3">
+                        <i class="fa-solid fa-building text-primary me-2"></i> SMART ROOM
+                    </h5>
+                    <p>Sistem peminjaman ruangan dan manajemen loker kunci otomatis berbasis web yang efisien, aman, dan terpercaya.</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#"><i class="fa-brands fa-facebook fs-5"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter fs-5"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram fs-5"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-2">
+                    <h5>Tautan</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#beranda">Beranda</a></li>
+                        <li class="mb-2"><a href="#fitur">Fitur</a></li>
+                        <li class="mb-2"><a href="#cara-kerja">Cara Kerja</a></li>
+                        <li class="mb-2"><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Kontak Kami</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fa-solid fa-location-dot me-2 text-primary"></i> Jl. Teknologi No. 42, Jakarta</li>
+                        <li class="mb-2"><i class="fa-solid fa-phone me-2 text-primary"></i> +62 812 3456 7890</li>
+                        <li class="mb-2"><i class="fa-solid fa-envelope me-2 text-primary"></i> info@smartroom.id</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <div class="text-center mt-4">
+                <p class="mb-0">&copy; 2024 SMART ROOM. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase v8 Compat -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.css"></script>
+
+    <!-- Inline Scripts -->
+    <script>
+        // 1. Navbar Scroll Behavior
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.getElementById('mainNav').classList.add('scrolled');
+            } else {
+                document.getElementById('mainNav').classList.remove('scrolled');
+            }
+        });
+
+        // 2. Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 3. Counter Animation using IntersectionObserver
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        const animateCounters = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        const inc = target / speed;
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, 10);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter); // Only animate once
+                }
+            });
+        };
+
+        const counterObserver = new IntersectionObserver(animateCounters, {
+            threshold: 0.5
+        });
+
+        counters.forEach(counter => {
+            counterObserver.observe(counter);
+        });
+
+        // 4. Mock Auth Check (Redirect if logged in)
+        // In real scenario, Firebase auth check happens here
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('smartRoom_user');
+            if (isLoggedIn) {
+                // window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

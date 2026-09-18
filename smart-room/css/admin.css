@@ -1,0 +1,226 @@
+/* admin.css - Admin Panel specific styles */
+
+:root {
+    --admin-sidebar-bg: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #0d9488 100%);
+    --admin-sidebar-width: 260px;
+    --admin-panel-bg: #ffffff;
+}
+
+body.admin-body {
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background: var(--admin-sidebar-bg);
+    color: white;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.sidebar-brand {
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.sidebar-nav a i {
+    width: 25px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left: 4px solid #14b8a6;
+}
+
+/* Main Content Styles */
+.admin-main {
+    flex: 1;
+    margin-left: var(--admin-sidebar-width);
+    width: calc(100% - var(--admin-sidebar-width));
+}
+
+.admin-header {
+    background: white;
+    padding: 20px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #1f2937;
+}
+
+.admin-panel {
+    background: var(--admin-panel-bg);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Stats Cards */
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.stat-details p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.stat-details h3 {
+    margin: 0;
+    color: #111827;
+    font-weight: 600;
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.chart-container h4 {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #374151;
+}
+
+/* Table Styles */
+.admin-table th {
+    background-color: #f9fafb;
+    color: #4b5563;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.admin-table td {
+    vertical-align: middle;
+}
+
+/* Monitoring Cards */
+.monitoring-card {
+    transition: transform 0.2s;
+}
+
+.monitoring-card:hover {
+    transform: translateY(-2px);
+}
+
+.monitoring-card.used {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.monitoring-card.available {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.monitoring-card.late {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    animation: pulse-border 2s infinite;
+}
+
+/* Animations */
+@keyframes pulse-border {
+    0% { border-color: rgba(245, 158, 11, 0.5); }
+    50% { border-color: rgba(245, 158, 11, 1); }
+    100% { border-color: rgba(245, 158, 11, 0.5); }
+}
+
+.status-pulse {
+    animation: pulse 2s infinite;
+}
+
+.status-pulse-fast {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Tabs */
+.admin-tabs .nav-link {
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.admin-tabs .nav-link.active {
+    color: #0d9488;
+    border-bottom: 2px solid #0d9488;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}

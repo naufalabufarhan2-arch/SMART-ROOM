@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own data, admins can read all
+      allow read: if isOwner(userId) || isAdmin();
+      // Users can update their own non-role data, admins can update all
+      allow write: if isAdmin() || (isOwner(userId) && (!request.resource.data.keys().hasAny(['role']) || request.resource.data.role == resource.data.role));
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Rooms - read: all authenticated, write: admin only
+    match /rooms/{roomId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // Lockers - read: all authenticated, write: admin only
+    match /lockers/{lockerId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // Bookings - read: owner or admin, write: authenticated (create), admin (update)
+    match /bookings/{bookingId} {
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid) || (isAuthenticated() && resource.data.status == 'approved'); // Allow others to read approved bookings to see availability
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAdmin() || (isOwner(resource.data.userId) && request.resource.data.status == 'cancelled');
+      allow delete: if isAdmin();
+    }
+    
+    // Key transactions - read: owner or admin, write: authenticated
+    match /keyTransactions/{transId} {
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow create, update: if isAuthenticated(); // Allow ESP32 system (using a service account or specific system user) to update
+      allow delete: if isAdmin();
+    }
+    
+    // Notifications - read: owner or admin, write: admin or system
+    match /notifications/{notifId} {
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow write: if isAuthenticated();
+    }
+  }
+}
